@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ImagesGallery</string>
+    <string name="text_retry">Повторить еще раз</string>
+    <string name="text_title">Картинки с сайта unsplash.com</string>
+</resources>
