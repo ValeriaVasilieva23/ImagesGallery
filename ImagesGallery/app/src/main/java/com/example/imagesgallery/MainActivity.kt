@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     private var gridLayoutManager: GridLayoutManager? = null
     private var imagesGalleryAdapter: ImagesGalleryAdapter? = null
-
+    private var errorText: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,6 +45,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         supportActionBar?.hide()
+
+        model.getErrorText().observe(this) {
+            errorText = it
+        }
     }
 
     private fun showError() {
@@ -52,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             val tvError: TextView = findViewById(R.id.tvError)
             val btnRetry: Button = findViewById(R.id.buttonRetry)
             val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-//            tvError.setText(errorText)
+            tvError.text = errorText
             tvError.visibility = View.VISIBLE
             btnRetry.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
@@ -91,7 +95,6 @@ class MainActivity : AppCompatActivity() {
             } else {
                 showError()
             }
-
         }
     }
 

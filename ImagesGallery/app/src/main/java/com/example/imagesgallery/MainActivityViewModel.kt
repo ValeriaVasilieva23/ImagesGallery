@@ -1,6 +1,7 @@
 package com.example.imagesgallery
 
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -15,17 +16,21 @@ class MainActivityViewModel constructor(
     private var text: MutableLiveData<ArrayList<ImageFromInternet>>? = null
     private val getPhotosQuery = "${IMAGES_SERVER_URL}/napi/photos?per_page=30&page="
     private var imagesFromJson: ArrayList<ImageFromInternet>? = null
+    private val errorText = MutableLiveData<String>()
+    fun getErrorText(): LiveData<String?> {
+        return errorText
+    }
 
     private var pageNum: Int = 1
 
     suspend fun getImagesFromJson(): ArrayList<ImageFromInternet>? {
-
         if (text == null) {
             val client = HttpClient()
             val text: String
             try {
                 text = client.get(getPhotosQuery + pageNum++)
             } catch (e: Exception) {
+                errorText.postValue("Сервер недоступен")
                 showError()
                 return null
             }
@@ -33,6 +38,7 @@ class MainActivityViewModel constructor(
             try {
                 imagesFromJson = mapper.readValue(text)
             } catch (e: Exception) {
+                errorText.postValue("Ответ от сервера не распознан")
                 showError()
                 return null
             }
