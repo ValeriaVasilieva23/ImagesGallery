@@ -1,4 +1,4 @@
-package com.example.imagesgallery
+package com.example.domain
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

@@ -1,4 +1,4 @@
-package com.example.imagesgallery
+package com.example.domain
 
 import android.content.Context
 import android.content.Intent
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 class ImagesGalleryAdapter(
-    private val context: Context,
+    private var context: Context,
     private var images: ArrayList<ImageFromInternet>,
     private var onScrolledToEnd: () -> Unit
 ) : RecyclerView.Adapter<ImagesGalleryAdapter.ImageViewHolder>() {
@@ -56,5 +56,14 @@ class ImagesGalleryAdapter(
             this.images.addAll(newImages)
             notifyDataSetChanged()
         }
+    }
+
+    fun setContext1(context: Context) {
+        this.context = context
+        val savedImages = images.toCollection(mutableListOf())
+        images.clear()
+        notifyDataSetChanged()
+        images.addAll(savedImages)
+        notifyDataSetChanged()
     }
 }

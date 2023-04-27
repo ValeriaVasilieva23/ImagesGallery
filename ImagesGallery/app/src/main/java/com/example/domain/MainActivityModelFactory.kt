@@ -1,4 +1,4 @@
-package com.example.imagesgallery
+package com.example.domain
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

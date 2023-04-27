@@ -1,4 +1,4 @@
-package com.example.imagesgallery
+package com.example.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

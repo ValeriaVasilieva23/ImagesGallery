@@ -1,4 +1,4 @@
-package com.example.imagesgallery
+package com.example.domain
 
 import android.content.Context
 import android.os.Bundle
@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private var gridLayoutManager: GridLayoutManager? = null
-    private var imagesGalleryAdapter: ImagesGalleryAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -62,7 +61,8 @@ class MainActivity : AppCompatActivity() {
     private fun getImagesFromServer(
         model: MainActivityViewModel,
         context: Context,
-        recyclerView: RecyclerView
+        recyclerView: RecyclerView,
+        onScrollToEnd: Boolean = false
     ) {
         var data: ArrayList<ImageFromInternet>?
         GlobalScope.launch(Dispatchers.IO) {
@@ -75,19 +75,7 @@ class MainActivity : AppCompatActivity() {
                 GlobalScope.launch(Dispatchers.Main) {
                     recyclerView.visibility = View.VISIBLE
                 }
-                if (imagesGalleryAdapter == null) {
-                    imagesGalleryAdapter = ImagesGalleryAdapter(
-                        context,
-                        data!!,
-                        onScrolledToEnd = { getImagesFromServer(model, context, recyclerView) })
-                    GlobalScope.launch(Dispatchers.Main) {
-                        recyclerView.adapter = imagesGalleryAdapter
-                    }
-                } else {
-                    GlobalScope.launch(Dispatchers.Main) {
-                        imagesGalleryAdapter!!.addImages(data)
-                    }
-                }
+                model.getAdapter(context, data, recyclerView, onScrollToEnd) { getImagesFromServer(model, context, recyclerView, onScrollToEnd = true) }
             }
         }
     }
